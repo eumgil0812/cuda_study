@@ -1,0 +1,6 @@
+# Or more generally: ignore all files without extension
+*
+!*/
+!*.cu
+!*.md
+!*.gitignore
