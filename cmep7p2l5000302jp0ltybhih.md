@@ -7,7 +7,7 @@ tags: linear-algebra
 
 ---
 
-## 1\. Basic Mathematical Concepts
+# 1\. Basic Mathematical Concepts
 
 Before diving into linear algebra, let’s first review some essential concepts: **sets, mappings, and functions.**
 
@@ -25,7 +25,7 @@ Each object belonging to a set is called an **element**.
 * The set of odd numbers → {1, 3, 5, 7, …}
     
 
-### Ways to Represent a Set
+Ways to Represent a Set
 
 * **Roster Form**  
     List out each element of the set.
