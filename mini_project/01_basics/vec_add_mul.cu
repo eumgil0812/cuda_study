@@ -68,9 +68,16 @@ int main(int argc, char** argv) {
     CUDA_CHECK(cudaMemcpy(dA, hA.data(), bytes, cudaMemcpyHostToDevice));
     CUDA_CHECK(cudaMemcpy(dB, hB.data(), bytes, cudaMemcpyHostToDevice));
 
+
     // 4) Kernel launch parameter (1D)
     int block = 256;                               // try 128/256/512
     int grid  = (int)std::ceil((double)N / block); // ceil(N/block)
+
+    /* === Warm-up start (remove context/JIT/clock ramp-up overhead) === */
+    CUDA_CHECK(cudaFree(0));                      // Force context creation
+    vecAdd<<<grid, block>>>(dA, dB, dC, N);       // Launch a dummy kernel once
+    CUDA_CHECK(cudaDeviceSynchronize());          // Wait until it fully completes
+    /* === Warm-up end === */
 
     /* If 2D/3D:
     dim3 block2(16, 16);
