@@ -153,18 +153,12 @@ Matrices are mainly used in linear algebra to represent data or linear transform
 * **Element / Entry**  
     Each individual number contained in a matrix.
     
-    * Example: In matrix A, a12=2a\_{12} = 2a12​=2 (the element in the 1st row and 2nd column).
-        
 * **Square Matrix**  
     A matrix in which the number of rows equals the number of columns.
     
-    * Example: a 3×3 matrix.
-        
 * **Main Diagonal**  
     The diagonal running from the top-left to the bottom-right of a square matrix.
     
-    * Example: a11,a22,a33a\_{11}, a\_{22}, a\_{33}a11​,a22​,a33​.
-        
 * **Diagonal Matrix**  
     A square matrix in which all the elements outside the main diagonal are zero.
     
