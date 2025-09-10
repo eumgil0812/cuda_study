@@ -196,7 +196,7 @@ That’s it — you should see periodic prints from FreeRTOS tasks/timers in you
 
 ---
 
-# Minimal Example You Can Blog (Two Tasks + Delay)
+# Minimal Example (Two Tasks + Delay)
 
 This is a small FreeRTOS example you can drop into a board project (or adapt into the QEMU demo). One task blinks an LED at 1 Hz; another prints every 500 ms. (Replace `LED_Toggle()` and `uart_write()` with your HAL calls.)
 
@@ -246,11 +246,8 @@ int main(void) {
     
 4. Build & flash. You’ll see LED blinking and UART messages.
     
-
-### Where to send readers for “official” getting started
-
-* **FreeRTOS Beginner/Quick Start Guides** (great for first-time setup) ([freertos.org](https://www.freertos.org/Documentation/01-FreeRTOS-quick-start/01-Beginners-guide/00-Overview?utm_source=chatgpt.com), [freertos.org](https://freertos.org/Documentation/01-FreeRTOS-quick-start/01-Beginners-guide/02-Quick-start-guide?utm_source=chatgpt.com))
+    **FreeRTOS Beginner/Quick Start Guides** (great for first-time setup) ([freertos.org](https://www.freertos.org/Documentation/01-FreeRTOS-quick-start/01-Beginners-guide/00-Overview?utm_source=chatgpt.com), [freertos.org](https://freertos.org/Documentation/01-FreeRTOS-quick-start/01-Beginners-guide/02-Quick-start-guide?utm_source=chatgpt.com))
     
-* **Download pages & releases** if they want zip/tags or LTS ([freertos.org](https://www.freertos.org/Documentation/02-Kernel/01-About-the-FreeRTOS-kernel/03-Download-freeRTOS/01-DownloadFreeRTOS?utm_source=chatgpt.com), [GitHub](https://github.com/FreeRTOS/FreeRTOS-Kernel/releases?utm_source=chatgpt.com))
+5. **Download pages & releases** if they want zip/tags or LTS ([freertos.org](https://www.freertos.org/Documentation/02-Kernel/01-About-the-FreeRTOS-kernel/03-Download-freeRTOS/01-DownloadFreeRTOS?utm_source=chatgpt.com), [GitHub](https://github.com/FreeRTOS/FreeRTOS-Kernel/releases?utm_source=chatgpt.com))
     
-* **GitHub super-repo** with all demos (including the QEMU one) ([GitHub](https://github.com/FreeRTOS/FreeRTOS?utm_source=chatgpt.com))
+    **GitHub super-repo** with all demos (including the QEMU one) ([GitHub](https://github.com/FreeRTOS/FreeRTOS?utm_source=chatgpt.com))
