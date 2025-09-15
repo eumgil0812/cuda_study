@@ -251,3 +251,51 @@ int main(void) {
 5. **Download pages & releases** if they want zip/tags or LTS ([freertos.org](https://www.freertos.org/Documentation/02-Kernel/01-About-the-FreeRTOS-kernel/03-Download-freeRTOS/01-DownloadFreeRTOS?utm_source=chatgpt.com), [GitHub](https://github.com/FreeRTOS/FreeRTOS-Kernel/releases?utm_source=chatgpt.com))
     
     **GitHub super-repo** with all demos (including the QEMU one) ([GitHub](https://github.com/FreeRTOS/FreeRTOS?utm_source=chatgpt.com))
+    
+
+```c
+xTaskCreate(TaskPrint, "print",
+            configMINIMAL_STACK_SIZE + 128,
+            NULL,
+            tskIDLE_PRIORITY + 2,
+            NULL);
+```
+
+* `TaskPrint`  
+    The task entry function pointer. Must match `void Task(void *arg)`.
+    
+* `"print"`  
+    Task name shown in debug/trace (max length = `configMAX_TASK_NAME_LEN`).
+    
+* `configMINIMAL_STACK_SIZE + 128`  
+    Task stack **depth (in words, not bytes)**.  
+    Actual bytes = `(configMINIMAL_STACK_SIZE + 128) * sizeof(StackType_t)`.  
+    On Cortex-M, `sizeof(StackType_t)` is typically 4, so `+128` ≈ **+512 B**.  
+    Printing/UART wrappers often need extra stack—leave headroom.
+    
+* `NULL`  
+    User parameter passed to the task. Supply a pointer (e.g., to a queue or config struct) if needed.
+    
+* `tskIDLE_PRIORITY + 2`  
+    Task priority two steps above Idle (0).  
+    For periodic printing, `+2` is usually fine; keep it **below** more critical consumers/drivers.
+    
+* `NULL`  
+    You’re not storing the created task handle. If you’ll later call `vTaskDelete()` or change priority, pass a pointer here to capture it.
+    
+
+---
+
+## Practical tips (stack/priority/safety)
+
+* **Measure stack, don’t guess:** Call `uxTaskGetStackHighWaterMark(NULL)` at runtime and size the stack based on the worst-case watermark in your next build.
+    
+* **Avoid blocking UART in the task:** If the driver blocks, the task can stall. Preferred pattern: push strings into a **queue/stream buffer**, and have a dedicated UART-TX task send via **DMA/IRQ**.
+    
+* `printf` is not inherently thread-safe:
+    
+    * Option A: guard with a **mutex**.
+        
+    * Option B: build with `snprintf` into a buffer and have a **single** TX task send it.
+        
+* **For periodic tasks, use** `vTaskDelayUntil()` to avoid drift.
