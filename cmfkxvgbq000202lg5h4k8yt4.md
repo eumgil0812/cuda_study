@@ -108,15 +108,15 @@ QueueHandle_t q;
 
 * * **MAILBOX\_LEN 1:** Mailbox pattern that keeps only the latest value.
         
-    * **StaticQueue\_t qCtrl:** Storage for the static creation control block (do not modify its contents).
+        * **StaticQueue\_t qCtrl:** Storage for the static creation control block (do not modify its contents).
+            
+        * **qStorage\[\]:** Actual storage for queue items (byte array). Size = *length × item size*.
+            
+        * **QueueHandle\_t q:** Handle that references the queue (used by the API).
+            
         
-    * **qStorage\[\]:** Actual storage for queue items (byte array). Size = *length × item size*.
+        **Note:** `qCtrl` and `qStorage` must have **global/static lifetime** (not local stack variables).
         
-    * **QueueHandle\_t q:** Handle that references the queue (used by the API).
-        
-    
-    **Note:** `qCtrl` and `qStorage` must have **global/static lifetime** (not local stack variables).
-    
 
 ### 3) Queue creation (static)
 
@@ -148,12 +148,12 @@ void producer_task(void *arg) {
 
 * * Every **10 ms**, fill a sample and send it with `xQueueOverwrite()`.
         
-    * **Meaning:** If the queue is full (length-1 already holding a value), replace it with the newest one.  
-        → No backlog; only the **latest** value is kept.
+        * **Meaning:** If the queue is full (length-1 already holding a value), replace it with the newest one.  
+            → No backlog; only the **latest** value is kept.
+            
         
-    
-    *Tip:* `xQueueOverwrite()` is intended for **mailbox (length-1)** use.
-    
+        *Tip:* `xQueueOverwrite()` is intended for **mailbox (length-1)** use.
+        
 
 ### 5) Consumer task
 
@@ -172,15 +172,15 @@ void consumer_task(void *arg) {
 
 * * Waits for a new message for up to **50 ms**.
         
-    * On success, calls `process(s)`; on timeout, calls `handle_timeout()` (e.g., notify/log).
-        
+        * On success, calls `process(s)`; on timeout, calls `handle_timeout()` (e.g., notify/log).
+            
 
 ### 6) Effect of this design
 
 * * **Pros:** When only the latest state matters, backlog and latency disappear. The system doesn’t stall even if the consumer is slower.
         
-    * **Cons:** Intermediate samples may be **dropped** → not suitable when **every** sample must be processed.
-        
+        * **Cons:** Intermediate samples may be **dropped** → not suitable when **every** sample must be processed.
+            
 
 ### 7) Practical checklist
 
@@ -325,6 +325,151 @@ void consumer(void* _){
 
 **Pros:** Eliminates large copies; allocation-free → real-time friendly.  
 **Caution:** Document the ownership protocol—who returns buffers to `freeQ`, and when. *(e.g., the consumer returns the packet pointer to* `freeQ` right after `process()`.)
+
+0) Prerequisite: create queues and the queue set
+
+(Example uses dynamic creation; static creation works too.)
+
+```c
+// Example message types
+typedef struct { char buf[32]; uint16_t len; } UartMsg;
+typedef struct { uint32_t ts; uint8_t pin; uint8_t pressed; } BtnEvt;
+typedef struct { uint32_t ts; int16_t value; } Sensor;
+
+QueueHandle_t qUart, qBtn, qSensor;
+QueueSetHandle_t qset;
+
+void init_set(void){
+    qUart   = xQueueCreate(16, sizeof(UartMsg));
+    qBtn    = xQueueCreate(8,  sizeof(BtnEvt));
+    qSensor = xQueueCreate(8,  sizeof(Sensor));
+
+    // Queue set capacity: usually the sum of member queue lengths
+    qset = xQueueCreateSet(16 + 8 + 8);
+
+    // Only “empty” queues can be added to a set
+    xQueueAddToSet(qUart,   qset);
+    xQueueAddToSet(qBtn,    qset);
+    xQueueAddToSet(qSensor, qset);
+}
+```
+
+---
+
+1) Sending signals (items) from other tasks
+
+```c
+void uart_rx_task(void *arg) {
+    for (;;) {
+        UartMsg m;
+        // ... UART RX/parsing here ...
+        // e.g., fill m.buf and m.len
+        if (xQueueSend(qUart, &m, pdMS_TO_TICKS(2)) != pdPASS) {
+            // Handle full queue: drop counter, warning, etc.
+        }
+    }
+}
+
+void button_task(void *arg) {
+    for (;;) {
+        // ... polling/debouncing then create an event ...
+        BtnEvt e = { .ts = xTaskGetTickCount(), .pin = 5, .pressed = 1 };
+        xQueueSend(qBtn, &e, 0); // If OK to drop, use non-blocking
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
+}
+
+void sensor_task(void *arg) {
+    for (;;) {
+        Sensor s = { .ts = xTaskGetTickCount(), .value = read_sensor() };
+        // For real-time paths: short timeout or drop policy
+        xQueueSend(qSensor, &s, pdMS_TO_TICKS(1));
+        vTaskDelay(pdMS_TO_TICKS(5));
+    }
+}
+```
+
+> **Key point:** The dispatcher wakes on the **set**, then pulls the actual data with `xQueueReceive()` from the specific ready queue.
+
+---
+
+2) Sending signals (items) from ISRs
+
+In ISRs you **must** use the `…FromISR()` variants, and request an immediate context switch when needed to minimize latency.
+
+```c
+void USARTx_IRQHandler(void){
+    BaseType_t hpw = pdFALSE;
+    // Keep ISR minimal; do parsing in a task
+    UartMsg m = { .len = rx_len /* length from DMA/DR */, /* fill buf */ };
+    xQueueSendFromISR(qUart, &m, &hpw);
+    portYIELD_FROM_ISR(hpw);
+}
+
+void EXTIx_IRQHandler(void){
+    BaseType_t hpw = pdFALSE;
+    BtnEvt e = { .ts = xTaskGetTickCountFromISR(), .pin = 5, .pressed = 1 };
+    xQueueSendFromISR(qBtn, &e, &hpw);
+    portYIELD_FROM_ISR(hpw);
+}
+
+void ADC_DMA_IRQHandler(void){
+    BaseType_t hpw = pdFALSE;
+    Sensor s = { .ts = xTaskGetTickCountFromISR(), .value = latest_adc };
+    xQueueSendFromISR(qSensor, &s, &hpw);
+    portYIELD_FROM_ISR(hpw);
+}
+```
+
+> **Note (Cortex-M):** These ISRs must comply with the `configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY` rule for `…FromISR()` calls to be safe.
+
+---
+
+3) If you only need a signal (no data), a semaphore works too
+
+A queue set can include binary/counting semaphores as members. When you only need to signal an event, this is lighter than sending data.
+
+```c
+SemaphoreHandle_t semBtn;
+
+void init_set_with_sem(void){
+    semBtn = xSemaphoreCreateBinary();
+    // ... qUart, qSensor도 생성 ...
+    qset = xQueueCreateSet(16 + 8 + 1);
+    xQueueAddToSet(qUart, qset);
+    xQueueAddToSet(qSensor, qset);
+    xQueueAddToSet(semBtn, qset); // 
+}
+
+void EXTIx_IRQHandler(void){
+    BaseType_t hpw = pdFALSE;
+    xSemaphoreGiveFromISR(semBtn, &hpw);
+    portYIELD_FROM_ISR(hpw);
+}
+
+void dispatcher(void* _){
+    QueueSetMemberHandle_t ready;
+    for(;;){
+        ready = xQueueSelectFromSet(qset, portMAX_DELAY);
+        if (ready == qUart)   { UartMsg m; xQueueReceive(qUart, &m, 0); handle_uart(m); }
+        else if (ready == semBtn) { xSemaphoreTake(semBtn, 0); handle_btn_event(); }
+        else if (ready == qSensor){ Sensor s; xQueueReceive(qSensor, &s, 0); handle_sensor(s); }
+    }
+}
+```
+
+---
+
+4) Common pitfalls checklist
+
+* **Queue set capacity** should usually be the **sum of all member queue lengths** (otherwise you risk missed signals under bursts).
+    
+* **Add/remove members only when the member queue is empty.**
+    
+* After waking from `xQueueSelectFromSet`, you **must** pull **one item** from the ready member with `xQueueReceive(..., 0)`; otherwise that member stays ready and can starve others.
+    
+* If one source is bursty, use a **drain policy**: after a wake, consume up to **K items** from that queue, then return to `select` to maintain fairness.
+    
 
 ### 3.3 Queue Set: wait on multiple sources with one task
 
