@@ -32,7 +32,7 @@ The key feature is **priority inversion prevention (inheritance)**—this is wha
 
 ## 2) Minimal examples (FreeRTOS)
 
-### 2.1 Dynamic creation
+### Dynamic creation
 
 ```c
 #include "FreeRTOS.h"
@@ -57,7 +57,7 @@ void use_shared(void){
 }
 ```
 
-### 2.2 Static creation
+### Static creation
 
 ```c
 static StaticSemaphore_t mCtrl;
@@ -84,12 +84,12 @@ void init_mutex_static(void){
 
 * * Scenario: **L** (low-priority) holds the mutex; **H** (high-priority) waits on the same mutex.
         
-    * **Inheritance:** the kernel temporarily **raises L’s priority up to H’s**, so L finishes the critical section and releases the mutex sooner.
-        
-    * In FreeRTOS, this is **automatic for mutex types** (with `configUSE_MUTEXES=1`).
-        
-    * **Binary semaphores don’t have priority inheritance** → for exclusive access, **use a mutex**.
-        
+        * **Inheritance:** the kernel temporarily **raises L’s priority up to H’s**, so L finishes the critical section and releases the mutex sooner.
+            
+        * In FreeRTOS, this is **automatic for mutex types** (with `configUSE_MUTEXES=1`).
+            
+        * **Binary semaphores don’t have priority inheritance** → for exclusive access, **use a mutex**.
+            
 
 ---
 
@@ -124,7 +124,7 @@ void init_mutex_static(void){
 
 ---
 
-### 5) Recursive mutex
+## 5) Recursive mutex
 
 * When the **same task** must acquire the **same mutex nested** (recursion/library call chains):
     
@@ -176,18 +176,16 @@ void init_mutex_static(void){
     
 * * Touch only the **data truly requiring the lock**; do the rest outside.
         
-    
-    ### ❌ Bad patterns
-    
-    * Holding a mutex while doing `vTaskDelay()`, `xQueueReceive(portMAX_DELAY)`, `printf`, **flash writes**, or any **long** operation.
+        ### ❌ Bad patterns
         
-    * Trying to use a **mutex in an ISR** (nope).
-        
-    * Using a **binary semaphore** for resource protection (no inheritance → inversion risk).
-        
-    * No lock ordering → deadlocks.
-        
-    
+        * Holding a mutex while doing `vTaskDelay()`, `xQueueReceive(portMAX_DELAY)`, `printf`, **flash writes**, or any **long** operation.
+            
+        * Trying to use a **mutex in an ISR** (nope).
+            
+        * Using a **binary semaphore** for resource protection (no inheritance → inversion risk).
+            
+        * No lock ordering → deadlocks.
+            
 
 ---
 
