@@ -396,7 +396,7 @@ Open the **root directory** (i.e., the FAT32 root) of the device.
 
 ---
 
-### ✅ 4. `kernel.elf` 파일 열기
+### ✅ 4. Open `kernel.elf`
 
 ```c
 Status = RootDir->Open(RootDir, &KernelFile, L"kernel.elf", EFI_FILE_MODE_READ, 0);
