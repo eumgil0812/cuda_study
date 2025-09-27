@@ -49,7 +49,7 @@ void f(void) {
 
 ---
 
-## **Using** `malloc()` Properly
+## **2) Using** `malloc()` Properly
 
 ```c
 #include <stdlib.h>
