@@ -11,6 +11,8 @@ At the heart of this abstraction lie three critical entities: **the CPU, process
 
 ---
 
+# Part I. CPU and Operating System Fundamentals
+
 ## 1\. Everything Starts with the CPU
 
 The CPU can only execute the operations defined in its **Instruction Set Architecture (ISA)**.  
@@ -76,6 +78,8 @@ Thus, the process model is not just a logical abstraction—it is deeply tied to
 
 ---
 
+# Part II. From Processes to Threads
+
 ## 1.4 The Evolution from Process to Thread
 
 Threads are execution units **within a process**:
@@ -134,6 +138,8 @@ Beyond simple parallelism:
 
 ---
 
+# Part III. Thread Execution and Management
+
 ## 1.7 How Thread Pools Work
 
 Thread pools pre-create a set of threads that wait for tasks.
@@ -168,6 +174,8 @@ But tuning is not just about counts:
 These are active research and systems engineering topics.
 
 ---
+
+# Part IV. Memory Sharing in Multithreaded Programs
 
 ## 2.1 Thread-Local Resources
 
