@@ -7,6 +7,8 @@ tags: tinet
 
 ---
 
+[https://github.com/eumgil0812/network/tree/main/day01](https://github.com/eumgil0812/network/tree/main/day01)
+
 Networking is not just theory — you can build an entire lab environment on your laptop.  
 In this post, we’ll create a **realistic virtual network topology** using [`tinet`](https://github.com/tinynetwork/tinet), a lightweight network testbed framework that combines **Docker**, **Linux network namespaces**, and **veth** interfaces.
 
