@@ -277,7 +277,7 @@ ip netns add R_ROUTER
 ip netns add green_R1
 ```
 
-## 🪄 4️⃣ **Set up the links**
+### 🪄 4️⃣ **Set up the links**
 
 ```bash
 # blue_R1 ↔ R_ROUTER Connect
@@ -291,7 +291,7 @@ ip link set veth-g netns green_R1
 ip link set veth-gr netns R_ROUTER
 ```
 
-## 🌐 5️⃣ IP Address
+### 🌐 5️⃣ IP Address
 
 ```bash
 # Blue namespace
@@ -312,7 +312,7 @@ ip netns exec R_ROUTER ip link set veth-gr up
 ip netns exec R_ROUTER ip link set lo up
 ```
 
-## 🚀 6️⃣ Routing Setting
+### 🚀 6️⃣ Routing Setting
 
 ```bash
 # IP forwarding 
@@ -325,7 +325,7 @@ ip netns exec blue_R1 ip route add 20.0.0.0/24 via 10.0.0.254
 ip netns exec green_R1 ip route add 10.0.0.0/24 via 20.0.0.254
 ```
 
-## ✅ 7️⃣ Connecting Test
+### ✅ 7️⃣ Connecting Test
 
 ```bash
 ip netns exec blue_R1 ping -c 3 20.0.0.1
