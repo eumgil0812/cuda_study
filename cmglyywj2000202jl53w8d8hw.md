@@ -14,6 +14,8 @@ In the previous post, we implemented the **First Come First Served (FCFS)** sche
 This time, we'll take it one step further and explore a smarter strategy: **Shortest Job First (SJF)**.  
 👉 SJF improves CPU utilization by selecting the **shortest burst time** first, reducing average waiting time and turnaround time.
 
+[https://github.com/eumgil0812/os/main/scheduler/sjf.c](https://github.com/eumgil0812/os/blob/main/scheduler/sjf.c)
+
 ---
 
 ## 🧠 What is SJF Scheduling?
