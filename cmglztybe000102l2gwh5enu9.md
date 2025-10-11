@@ -16,7 +16,7 @@ However, SJF has a major limitation:
 
 To overcome this, we introduce **Shortest Remaining Time First (SRTF)** — the **preemptive version of SJF** and the starting point of preemptive scheduling strategies.
 
-[https://github.com/eumgil0812/os/main/scheduler/sjf.c](https://github.com/eumgil0812/os/blob/main/scheduler/sjf.c)
+[https://github.com/eumgil0812/os/blob/main/scheduler/srtf.c](https://github.com/eumgil0812/os/blob/main/scheduler/srtf.c)
 
 ---
 
