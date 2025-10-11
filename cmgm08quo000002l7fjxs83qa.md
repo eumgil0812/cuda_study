@@ -1,5 +1,5 @@
 ---
-title: "[OS Scheduler Practice] Round Robin"
+title: "[OS Scheduler Practice ④] Round Robin"
 datePublished: Sat Oct 11 2025 08:19:51 GMT+0000 (Coordinated Universal Time)
 cuid: cmgm08quo000002l7fjxs83qa
 slug: os-scheduler-practice-round-robin
