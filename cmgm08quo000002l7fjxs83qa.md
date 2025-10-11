@@ -12,6 +12,8 @@ tags: scheduling, round-robin
 In modern operating systems, **process scheduling** determines **which process gets the CPU and when**.  
 Today, let’s implement **Round Robin scheduling** in C — one of the most widely used **preemptive scheduling algorithms**.
 
+[https://github.com/eumgil0812/os/blob/main/scheduler/rr.c](https://github.com/eumgil0812/os/blob/main/scheduler/rr.c)
+
 ---
 
 ## 🧭 What Is Round Robin Scheduling?
