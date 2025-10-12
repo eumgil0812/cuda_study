@@ -235,17 +235,7 @@ else if (strcmp(argv[1], "ls") == 0) list_files(argv[2]);
 
 ## 12\. Demo Run
 
-```bash
-$ ./fs mkfs disk.img 1024
-$ ./fs create disk.img hello.txt
-$ ./fs write disk.img hello.txt "Hello FAT!"
-$ ./fs read disk.img hello.txt
-Hello FAT!
-$ ./fs ls disk.img
-hello.txt (size=10)
-```
-
-It really behaves like a tiny file system — because it *is* one.
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1760264635802/c8c3a326-9555-41db-b156-dfb7388d3106.png align="center")
 
 ---
 
