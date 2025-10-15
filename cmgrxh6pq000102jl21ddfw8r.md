@@ -417,7 +417,7 @@ Now, build BootLoader.inf
 build -a X64 -t GCC5 -p MdeModulePkg/MdeModulePkg.dsc -m App/BootLoader/BootLoader.inf
 ```
 
-## (4) QEMU
+## (5) QEMU
 
 ## 🧰 UEFI + Secure Boot (ELF Version) Boot Procedure
 
