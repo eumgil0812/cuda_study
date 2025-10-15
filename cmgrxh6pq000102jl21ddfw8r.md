@@ -95,7 +95,7 @@ openssl pkey -inform DER -in pubkey.der -pubin -text -noout
 
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1760517447136/1fbd9f18-8022-41a7-aa91-0ae9f39d2ec8.png align="center")
 
-## ③ Sign Kernel (kernel.sig)
+### ③ Sign Kernel (kernel.sig)
 
 For example, if ‘kernel.elf’ is the kernel binary you want to execute:
 
