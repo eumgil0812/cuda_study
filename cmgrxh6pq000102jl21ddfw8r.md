@@ -1,5 +1,5 @@
 ---
-title: "Adding Secure Boot Verification"
+title: "(7) Secure Boot"
 datePublished: Wed Oct 15 2025 11:49:03 GMT+0000 (Coordinated Universal Time)
 cuid: cmgrxh6pq000102jl21ddfw8r
 slug: adding-secure-boot-verification
