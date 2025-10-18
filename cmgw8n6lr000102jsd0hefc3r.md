@@ -148,7 +148,6 @@ void print_memory_map(BootInfo* bi) {
 
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1760789016688/63f38ca6-7f21-4b83-bb51-fa43031cda8a.png align="center")
 
-  
 Because UEFI passes many different types of memory regions — such as firmware-reserved areas, MMIO, ACPI, and boot service regions.
 
 👉 However, most of these regions are **not usable** from the OS’s perspective.
@@ -225,3 +224,8 @@ Other memory types are reserved for firmware, MMIO, or system use — touching t
 
 👉 So this filtering is not just “output optimization.”  
 👉 It’s the **starting point of the OS memory management system**.
+
+📂 **Source Code**  
+🔗 GitHub: [https://github.com/eumgil0812/OwnOS](https://github.com/eumgil0812/OwnOS)
+
+📌 Commit: git checkout 180628c
