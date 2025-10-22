@@ -11,7 +11,7 @@ We can create a bootable USB by building a **BOOTX64.EFI** file.
 
 ## What is an EFI file?
 
-### 🔹 EFI = **Extensible Firmware Interface**
+### EFI = **Extensible Firmware Interface**
 
 An `.efi` file is an **executable binary** used in systems that support **UEFI (Unified Extensible Firmware Interface)**.  
 Before the operating system (Windows, Linux, macOS, etc.) starts, the system firmware (UEFI) runs these files.
