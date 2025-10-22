@@ -84,7 +84,7 @@ seo@Lenovo:~/OwnOS/edk2$ tree -L 1
 
 Let's focus on reviewing only the key points.
 
-## 🔧 What is [`edksetup.sh`](http://edksetup.sh)?
+## What is [`edksetup.sh`](http://edksetup.sh)?
 
 [`edksetup.sh`](http://edksetup.sh) is an initialization script used in Linux/Unix environments to configure the build environment for EDK II (UEFI development).
 
