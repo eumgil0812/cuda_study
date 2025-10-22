@@ -453,7 +453,7 @@ even if they are built by different compilers or written in different languages.
 
 ---
 
-### **3\.** `EfiMemoryTypeToStr(uint32_t Type)` is *not* part of the standard
+### **3.** `EfiMemoryTypeToStr(uint32_t Type)` is *not* part of the standard
 
 This function isn’t defined anywhere in the UEFI specification.  
 It’s just a **convenience helper** that converts numeric type codes into human-readable strings like `"Conventional"` or `"BootServicesData"`.
@@ -485,11 +485,7 @@ In short:
 
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1761134819764/7cf5b841-c907-48c6-a9f7-eaa644224c32.png align="center")
 
-### Here’s a clean English version you can drop into your write-up.
-
----
-
-## Memory Summary
+### Memory Summary
 
 ```c
 Regions: 128
