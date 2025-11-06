@@ -137,7 +137,7 @@ CAN = Real-time, reliable, hardened communication bus.
 
 ---
 
-## 8) Example Topology
+### 8) Example Topology
 
 ```c
      Node A
@@ -148,15 +148,5 @@ Node B─+─Node C──── Termination (120Ω) at both ends
 ```
 
 Only the **ends** of the bus have **120Ω terminators**.
-
----
-
-## 9) One-Sentence Summary
-
-```c
-CAN is a real-time, message-based differential communication bus where
-multiple nodes share a single network and arbitration ensures that the
-highest-priority messages always transmit first.
-```
 
 ---
